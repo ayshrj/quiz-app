@@ -23,13 +23,22 @@ export const QuizBox = ({ question, options, correct, onCorrectAnswer }) => {
       const updatedAnswers = answers.map((answer, i) => {
         if (i === index) {
           if (answer.isCorrect) {
-            onCorrectAnswer(); // Call the onCorrectAnswer function if the selected answer is correct
+            onCorrectAnswer();
           }
+
+          if(answer.isCorrect){
+            console.log("Correct Answer");
+          }else{
+            console.log("Wrong Answer");
+          }
+          
           return { ...answer, clicked: true };
         }
+
         if (answer.isCorrect) {
           return { ...answer, clicked: true };
         }
+        
         return answer;
       });
       setAnswers(updatedAnswers);
@@ -46,7 +55,10 @@ export const QuizBox = ({ question, options, correct, onCorrectAnswer }) => {
           className={`answer ${
             answer.clicked ? (answer.isCorrect ? "correct" : "incorrect") : ""
           }`}
-          onClick={() => checkAnswer(index)}
+          onClick={() => {
+            checkAnswer(index) 
+            console.log("Answer: ", index+1, " Clicked")
+          }}
           style={{ pointerEvents: answered ? "none" : "auto" }}
         >
           {answer.text}

@@ -1,0 +1,32 @@
+.search-box {
+    display: flex;
+    align-items: center;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 8px;
+}
+
+/* Style the search input field */
+.search-input {
+    flex: 1;
+    border: none;
+    padding: 6px;
+    font-size: 16px;
+}
+
+/* Style the search button */
+.search-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 6px 12px;
+    margin-left: 5px;
+    cursor: pointer;
+}
+
+/* Add hover effect to the search button */
+.search-button:hover {
+    background-color: #0056b3;
+}

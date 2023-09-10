@@ -3,10 +3,12 @@ import { QuizBox } from "./QuizBox";
 import "./Quiz.css";
 import data from "../dataset/Data";
 
-const quizData = JSON.parse(data);
+// const quizData = JSON.parse(data);
 
-export const Quiz = () => {
+export const Quiz = (prop) => {
   const [correctCount, setCorrectCount] = useState(0);
+
+  const quizData = JSON.parse(prop.result);
 
   const handleCorrectAnswer = () => {
     setCorrectCount(correctCount + 1);

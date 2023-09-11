@@ -59,6 +59,9 @@ export const QuizBox = ({ question, options, correct, onCorrectAnswer }) => {
           <div className="answer-text">{answer.text}</div>
         </div>
       ))}
+      {/* <div className="horizontal-line"></div> */}
+      <div className="options">
+      </div>
     </div>
   );
 };

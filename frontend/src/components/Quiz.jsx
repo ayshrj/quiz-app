@@ -1,29 +1,48 @@
 import React, { useState } from "react";
 import { QuizBox } from "./QuizBox";
 import "./Quiz.css";
-// import data from "../dataset/Data";
 
 export const Quiz = (prop) => {
-  const [correctCount, setCorrectCount] = useState(0);
-
   const quizData = JSON.parse(prop.result);
+  const totalQuestions = quizData.length;
+  const [currentPage, setCurrentPage] = useState(0);
+  const [correctCount, setCorrectCount] = useState(0);
 
   const handleCorrectAnswer = () => {
     setCorrectCount(correctCount + 1);
   };
 
+  const goToNextPage = () => {
+    if (currentPage < totalQuestions - 1) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const goToPrevPage = () => {
+    if (currentPage > 0) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
   return (
     <div className="quiz-container">
-      {quizData.map((question, index) => (
+      {quizData.length > 0 && (
         <QuizBox
-          key={index}
-          {...question}
+          key={currentPage}
+          {...quizData[currentPage]}
           onCorrectAnswer={handleCorrectAnswer}
         />
-      ))}
+      )}
       <div className="counter-block">
-        {/* <span className="counter-text">Correct Answers:</span> */}
-        <span className="counter-number">{correctCount}/10</span>
+        <span className="counter-number">{correctCount}/{totalQuestions}</span>
+      </div>
+      <div className="pagination">
+        <button onClick={goToPrevPage} disabled={currentPage === 0}>
+          Prev
+        </button>
+        <button onClick={goToNextPage} disabled={currentPage === totalQuestions - 1}>
+          Next
+        </button>
       </div>
     </div>
   );

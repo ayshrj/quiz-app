@@ -14,6 +14,12 @@ body {
   padding: 20px;
   margin: 10px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 300px; /* Set the default fixed width */
+  height: 400px; /* Set the default fixed height */
+  overflow-y: auto; /* Add scrollbar if content exceeds height */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Distribute .answer elements equally */
 }
 
 .question {
@@ -31,10 +37,11 @@ body {
   justify-content: space-between;
   position: relative;
   transition: background-color 0.2s, border-color 0.2s;
+  padding: 10px; /* Add padding to create space for the line */
 }
 
 .answer-circle {
-  width: 20 px;
+  width: 20px;
   height: 20px;
   border: 2px solid #ccc;
   border-radius: 50%;
@@ -46,7 +53,6 @@ body {
   flex-shrink: 0;
 }
 
-
 .answer-text {
   flex-grow: 1;
   padding: 10px;
@@ -54,8 +60,6 @@ body {
 
 .answer:hover {
   background-color: #f0f0f0;
-  /* border-color: #007bff; */
-  border-style: dashed;
 }
 
 .correct {
@@ -85,6 +89,11 @@ body {
 }
 
 @media screen and (min-width: 768px) {
+  .quiz {
+    width: 400px; /* Set the width for larger screens */
+    height: 500px; /* Set the height for larger screens */
+  }
+
   .answer-circle {
     width: 30px;
     height: 30px;
@@ -93,14 +102,14 @@ body {
   .answer-text {
     padding: 15px;
   }
-
-  .quiz {
-    width: 400px;
-    font-size: 18px;
-  }
 }
 
 @media screen and (max-width: 767px) {
+  .quiz {
+    width: 300px; /* Set the width for smaller screens */
+    height: 600px; /* Set the height for smaller screens */
+  }
+
   .answer-circle {
     width: 20px;
     height: 20px;
@@ -110,17 +119,4 @@ body {
   .answer-text {
     padding: 5px;
   }
-
-  .quiz {
-    width: 300px;
-    font-size: 16px;
-  }
-}
-
-.correct-circle {
-  border-color: #66c266 !important;
-}
-
-.incorrect-circle {
-  border-color: #e64d4d !important;
 }

@@ -1,9 +1,12 @@
-import { createRequire } from "module"; // in case you need to use require
+import { createRequire } from "module";
 const require = createRequire(import.meta.url);
 
-const express = require("express");
-const bodyParser = require("body-parser");
-const cors = require("cors");
+import express from "express";
+import bodyParser from "body-parser";
+import cors from "cors";
+import { config } from "dotenv";
+import { Configuration, OpenAIApi } from "openai";
+import mongoose from "mongoose";
 
 const app = express();
 const port = 5000;
@@ -11,10 +14,7 @@ const port = 5000;
 app.use(cors());
 app.use(bodyParser.json());
 
-import { config } from "dotenv";
 config();
-
-import { Configuration, OpenAIApi } from "openai";
 
 const openai = new OpenAIApi(
   new Configuration({
@@ -22,43 +22,70 @@ const openai = new OpenAIApi(
   })
 );
 
-app.post("/search", (req, res) => {
+mongoose.connect(
+  "mongodb+srv://admin:RqAL6OT0p504Okqf@openai-project.w5wxmvh.mongodb.net/?retryWrites=true&w=majority",
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  }
+);
+
+const DataSchema = new mongoose.Schema({
+  query: String,
+  response: String,
+});
+
+const DataModel = mongoose.model("Data", DataSchema);
+
+app.post("/search", async (req, res) => {
   const Topic = req.body.query;
-  const Basic = `Give a quiz with 5 questions on ${Topic} in the JSON format like
-  Eg:
-  [
-    {
-      "question": "Question Here",
-      "options": [
-        "Option A",
-        "Option B",
-        "Option C",
-        "Option D"
-      ],
-      "correct": "2"
-    }
-  ]
-  
-  Note: correct has 0-based indexing`;
 
-  let data = null;
+  try {
+    const existingData = await DataModel.findOne({ query: Topic });
 
-  openai
-    .createChatCompletion({
-      model: "gpt-3.5-turbo",
-      messages: [{ role: "user", content: Basic }],
-    })
-    .then((response) => {
+    if (existingData) {
+      res.json({ data: existingData.response });
+    } else {
+      const Basic = `Give a quiz with 5 questions on ${Topic} in the JSON format like
+        Eg:
+        [
+          {
+            "question": "Question Here",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "correct": "2"
+          }
+        ]
+
+        Note: correct has 0-based indexing`;
+
+      let data = null;
+
+      const response = await openai.createChatCompletion({
+        model: "gpt-3.5-turbo",
+        messages: [{ role: "user", content: Basic }],
+      });
+
       data = response.data.choices[0].message.content;
-      console.log(response.data.choices[0].message.content);
+
+      const newData = new DataModel({
+        query: Topic,
+        response: data,
+      });
+      await newData.save();
+
       res.json({ data });
-    })
-    .catch((error) => {
-      console.error("OpenAI API error:", error);
-      res
-        .status(500)
-        .json({ error: "An error occurred while processing your request" });
-    });
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    res
+      .status(500)
+      .json({ error: "An error occurred while processing your request" });
+  }
 });
 
 app.listen(port, () => {

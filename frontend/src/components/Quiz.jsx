@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { QuizBox } from "./QuizBox";
 import "./Quiz.css";
-import data from "../dataset/Data";
+// import data from "../dataset/Data";
 
 export const Quiz = (prop) => {
   const [correctCount, setCorrectCount] = useState(0);
@@ -22,8 +22,8 @@ export const Quiz = (prop) => {
         />
       ))}
       <div className="counter-block">
-        <span className="counter-text">Correct Answers:</span>
-        <span className="counter-number">{correctCount}</span>
+        {/* <span className="counter-text">Correct Answers:</span> */}
+        <span className="counter-number">{correctCount}/10</span>
       </div>
     </div>
   );

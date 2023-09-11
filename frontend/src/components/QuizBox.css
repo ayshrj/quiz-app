@@ -5,7 +5,6 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 100vh;
   background-color: #f0f0f0;
 }
 
@@ -35,7 +34,7 @@ body {
 }
 
 .answer-circle {
-  width: 20px;
+  width: 20 px;
   height: 20px;
   border: 2px solid #ccc;
   border-radius: 50%;
@@ -44,7 +43,9 @@ body {
   justify-content: center;
   background-color: white;
   margin: 0 10px;
+  flex-shrink: 0;
 }
+
 
 .answer-text {
   flex-grow: 1;
@@ -53,7 +54,7 @@ body {
 
 .answer:hover {
   background-color: #f0f0f0;
-  border-color: #007bff;
+  /* border-color: #007bff; */
   border-style: dashed;
 }
 
@@ -95,7 +96,6 @@ body {
 
   .quiz {
     width: 400px;
-    height: 300px;
     font-size: 18px;
   }
 }
@@ -113,7 +113,6 @@ body {
 
   .quiz {
     width: 300px;
-    height: 200px;
     font-size: 16px;
   }
 }

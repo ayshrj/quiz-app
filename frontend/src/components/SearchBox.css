@@ -1,4 +1,3 @@
-/* Minimalist Search Box with Borders */
 .search-box {
     display: flex;
     align-items: center;
@@ -9,7 +8,6 @@
     transition: border-color 0.2s;
 }
 
-/* Style the search input field */
 .search-input {
     flex: 1;
     border: 1px solid #ccc;
@@ -21,9 +19,9 @@
     margin-top: 10px;
 }
 
-/* Style the search button */
 .search-button {
     background-color: transparent;
+    /* color: #a2a2a2; */
     color: #007bff;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -31,17 +29,16 @@
     margin-left: 5px;
     cursor: pointer;
     transition: color 0.2s;
-    height: 100%; /* Set the height to match the search box */
+    height: 100%;
 }
 
-/* Add hover effect to the search button */
 .search-button:hover {
+    /* color: #c9c9c9; */
     color: #0056b3;
 }
 
-/* Media Query for Responsiveness */
 @media (max-width: 768px) {
     .search-input {
-        font-size: 14px; /* Adjust font size for smaller screens */
+        font-size: 14px;
     }
 }

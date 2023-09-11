@@ -1,5 +1,5 @@
 import "./App.css";
-import { Quiz } from "./components/Quiz";
+// import { Quiz } from "./components/Quiz";
 import SearchBox from "./components/SearchBox";
 
 function App() {

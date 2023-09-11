@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import "./QuizBox.css";
 
 const convertDataToState = (parsedData) => {
@@ -13,55 +13,69 @@ const convertDataToState = (parsedData) => {
   return options;
 };
 
-export const QuizBox = ({ question, options, correct, onCorrectAnswer }) => {
-  const initialState = convertDataToState({ options, correct });
-  const [answers, setAnswers] = useState(initialState);
-  const [answered, setAnswered] = useState(false);
-
+export const QuizBox = ({ question, options, correct, onCorrectAnswer, onAnswer, selectedAnswer }) => {
   const checkAnswer = (index) => {
-    if (!answered) {
-      const updatedAnswers = answers.map((answer, i) => {
-        if (i === index) {
-          if (answer.isCorrect) {
-            onCorrectAnswer();
-          }
-          return { ...answer, clicked: true };
-        }
-        if (answer.isCorrect) {
-          return { ...answer, clicked: true };
-        }
-        return answer;
-      });
-      setAnswers(updatedAnswers);
-      setAnswered(true);
+    if (!selectedAnswer) {
+      const isCorrect = index === parseInt(correct);
+      onAnswer(index, isCorrect);
+      if (isCorrect) {
+        onCorrectAnswer();
+      }
     }
   };
 
   return (
     <div className="quiz">
       <div className="question">{question}</div>
-      {answers.map((answer, index) => (
+      {options.map((option, index) => (
         <div
           key={index}
           className={`answer ${
-            answer.clicked ? (answer.isCorrect ? "correct" : "incorrect") : ""
-          }`}
+            selectedAnswer
+              ? selectedAnswer.index === index
+                ? selectedAnswer.isCorrect
+                  ? "selected-correct"
+                  : "selected-incorrect"
+                : selectedAnswer.isCorrect && index === parseInt(correct)
+                ? "correct"
+                : ""
+              : ""
+          }
+          ${
+            (selectedAnswer && selectedAnswer.index === index && selectedAnswer.isCorrect) ||
+            (selectedAnswer && selectedAnswer.index !== index && index === parseInt(correct))
+            ? "correct"
+            : ""
+          } ${
+            selectedAnswer &&
+            selectedAnswer.index === index &&
+            !selectedAnswer.isCorrect
+              ? "incorrect"
+              : ""
+          }
+          `}
           onClick={() => checkAnswer(index)}
-          style={{ pointerEvents: answered ? "none" : "auto" }}
+          style={{ pointerEvents: selectedAnswer ? "none" : "auto" }}
         >
           <div
             className={`answer-circle ${
-              answer.clicked && answer.isCorrect ? "correct-circle" : ""
-            } ${answer.clicked && !answer.isCorrect ? "incorrect-circle" : ""}`}
+              (selectedAnswer && selectedAnswer.index === index && selectedAnswer.isCorrect) ||
+              (selectedAnswer && selectedAnswer.index !== index && index === parseInt(correct))
+                ? "correct-circle"
+                : ""
+            } ${
+              selectedAnswer &&
+              selectedAnswer.index === index &&
+              !selectedAnswer.isCorrect
+                ? "incorrect-circle"
+                : ""
+            }`}
           >
             {String.fromCharCode(65 + index)}
           </div>
-          <div className="answer-text">{answer.text}</div>
+          <div className="answer-text">{option}</div>
         </div>
       ))}
-      {/* <div className="horizontal-line"></div> */}
-      <div className="options">
-      </div>
     </div>
   );
 };

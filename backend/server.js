@@ -22,13 +22,10 @@ const openai = new OpenAIApi(
   })
 );
 
-mongoose.connect(
-  "mongodb+srv://admin:RqAL6OT0p504Okqf@openai-project.w5wxmvh.mongodb.net/?retryWrites=true&w=majority",
-  {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  }
-);
+mongoose.connect(process.env.mongoKey, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
 const DataSchema = new mongoose.Schema({
   query: String,

@@ -1,4 +1,4 @@
-[Quizidle](https://quiz-app-umber-phi.vercel.app/)
+[Quizidle](https://quiz-app-umber-phi.vercel.app/ "Visit the Quizidle Website")
 
 - Utilized the OpenAI API to generate quizzes on any topic provided to it.
 - Implemented a seamless flow: user inputs data on the frontend, which is then sent to the backend.

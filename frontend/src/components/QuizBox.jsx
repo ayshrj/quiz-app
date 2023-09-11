@@ -49,7 +49,11 @@ export const QuizBox = ({ question, options, correct, onCorrectAnswer }) => {
           onClick={() => checkAnswer(index)}
           style={{ pointerEvents: answered ? "none" : "auto" }}
         >
-          <div className="answer-circle">
+          <div
+            className={`answer-circle ${
+              answer.clicked && answer.isCorrect ? "correct-circle" : ""
+            } ${answer.clicked && !answer.isCorrect ? "incorrect-circle" : ""}`}
+          >
             {String.fromCharCode(65 + index)}
           </div>
           <div className="answer-text">{answer.text}</div>

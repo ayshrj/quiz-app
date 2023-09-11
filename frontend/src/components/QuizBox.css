@@ -31,6 +31,7 @@ body {
   align-items: center;
   justify-content: space-between;
   position: relative;
+  transition: background-color 0.2s, border-color 0.2s;
 }
 
 .answer-circle {
@@ -42,9 +43,7 @@ body {
   align-items: center;
   justify-content: center;
   background-color: white;
-  margin-left: 10px;
-  margin-right: 10px;
-  flex-shrink: 0;
+  margin: 0 10px;
 }
 
 .answer-text {
@@ -54,6 +53,7 @@ body {
 
 .answer:hover {
   background-color: #f0f0f0;
+  border-color: #007bff;
   border-style: dashed;
 }
 
@@ -63,6 +63,16 @@ body {
 }
 
 .incorrect {
+  background-color: #f8b0b0;
+  border-color: #e64d4d;
+}
+
+.correct-circle {
+  background-color: #a3e6a3;
+  border-color: #66c266;
+}
+
+.incorrect-circle {
   background-color: #f8b0b0;
   border-color: #e64d4d;
 }
@@ -82,17 +92,36 @@ body {
   .answer-text {
     padding: 15px;
   }
+
+  .quiz {
+    width: 400px;
+    height: 300px;
+    font-size: 18px;
+  }
 }
 
 @media screen and (max-width: 767px) {
   .answer-circle {
     width: 20px;
     height: 20px;
-    margin-left: 5px;
-    margin-right: 5px;
+    margin: 0 5px;
   }
 
   .answer-text {
     padding: 5px;
   }
+
+  .quiz {
+    width: 300px;
+    height: 200px;
+    font-size: 16px;
+  }
+}
+
+.correct-circle {
+  border-color: #66c266 !important;
+}
+
+.incorrect-circle {
+  border-color: #e64d4d !important;
 }

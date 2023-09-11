@@ -13,9 +13,10 @@ export const SearchBox = () => {
         setIsLoading(true);
         try {
             const res = await axios.post('http://localhost:5000/search', { query });
-            setResult(res.data.data);
+            setResult(res.data.data.match(/\[.*\]/s));
         } catch (error) {
-            console.error('Error:', error);
+            console.error('Error:', error); 
+            setResult("NaN")
         } finally {
             setIsLoading(false);
         }
@@ -54,7 +55,7 @@ export const SearchBox = () => {
             {isLoading ? (
                 <Loader />
             ) : (
-                result && <Quiz result={result} />
+                result && (result==="NaN" || ""? <div> No Quiz Can Be Generated </div> : <Quiz result={result} />)
             )}
         </div>
     );

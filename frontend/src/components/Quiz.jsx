@@ -3,8 +3,6 @@ import { QuizBox } from "./QuizBox";
 import "./Quiz.css";
 import data from "../dataset/Data";
 
-// const quizData = JSON.parse(data);
-
 export const Quiz = (prop) => {
   const [correctCount, setCorrectCount] = useState(0);
 

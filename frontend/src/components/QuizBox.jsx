@@ -5,7 +5,7 @@ const convertDataToState = (parsedData) => {
   const options = parsedData.options.map((option, index) => {
     return {
       text: option,
-      isCorrect: index === parseInt(parsedData.correct) - 1,
+      isCorrect: index === parseInt(parsedData.correct),
       clicked: false,
     };
   });
@@ -25,20 +25,11 @@ export const QuizBox = ({ question, options, correct, onCorrectAnswer }) => {
           if (answer.isCorrect) {
             onCorrectAnswer();
           }
-
-          if(answer.isCorrect){
-            console.log("Correct Answer");
-          }else{
-            console.log("Wrong Answer");
-          }
-          
           return { ...answer, clicked: true };
         }
-
         if (answer.isCorrect) {
           return { ...answer, clicked: true };
         }
-        
         return answer;
       });
       setAnswers(updatedAnswers);
@@ -55,13 +46,13 @@ export const QuizBox = ({ question, options, correct, onCorrectAnswer }) => {
           className={`answer ${
             answer.clicked ? (answer.isCorrect ? "correct" : "incorrect") : ""
           }`}
-          onClick={() => {
-            checkAnswer(index) 
-            console.log("Answer: ", index+1, " Clicked")
-          }}
+          onClick={() => checkAnswer(index)}
           style={{ pointerEvents: answered ? "none" : "auto" }}
         >
-          {answer.text}
+          <div className="answer-circle">
+            {String.fromCharCode(65 + index)}
+          </div>
+          <div className="answer-text">{answer.text}</div>
         </div>
       ))}
     </div>

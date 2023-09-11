@@ -1,25 +1,29 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import "./SearchBox.css";
+import Loader from "./Loader";
 import { Quiz } from "./Quiz";
 
 export const SearchBox = () => {
     const [query, setQuery] = useState('');
-    const [result, setResult] = useState(null); // Use null to represent no data
+    const [result, setResult] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
 
-    const searchTopic = async (event) => {
-        event.preventDefault();
-        console.log('button clicked');
-        setIsLoading(true); // Set loading state to true while fetching data
+    const searchTopic = async () => {
+        setIsLoading(true);
         try {
             const res = await axios.post('http://localhost:5000/search', { query });
             setResult(res.data.data);
         } catch (error) {
             console.error('Error:', error);
         } finally {
-            setIsLoading(false); // Set loading state back to false after data fetch
+            setIsLoading(false);
         }
+    }
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        searchTopic();
     }
 
     const inputChange = (event) => {
@@ -32,22 +36,23 @@ export const SearchBox = () => {
 
     return (
         <div>
-            <input
-                type="text"
-                value={query}
-                onChange={inputChange}
-                className="search-input"
-                placeholder="Search Topic"
-            />
-            <button
-                type="submit"
-                className="search-button"
-                onClick={searchTopic}
-            >
-                Search
-            </button>
+            <form onSubmit={handleSubmit}>
+                <input
+                    type="text"
+                    value={query}
+                    onChange={inputChange}
+                    className="search-input"
+                    placeholder="Search Topic"
+                />
+                <button
+                    type="submit"
+                    className="search-button"
+                >
+                    Search
+                </button>
+            </form>
             {isLoading ? (
-                <div>Loading...</div>
+                <Loader />
             ) : (
                 result && <Quiz result={result} />
             )}

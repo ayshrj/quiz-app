@@ -24,7 +24,7 @@ const openai = new OpenAIApi(
 
 app.post("/search", (req, res) => {
   const Topic = req.body.query;
-  const Basic = `Give a quiz with 2 questions on ${Topic} in the JSON format like
+  const Basic = `Give a quiz with 7 questions on ${Topic} in the JSON format like
   Eg:
   [
     {

@@ -1,32 +1,47 @@
+/* Minimalist Search Box with Borders */
 .search-box {
     display: flex;
     align-items: center;
-    background-color: #f0f0f0;
+    background-color: transparent;
     border: 1px solid #ccc;
     border-radius: 5px;
-    padding: 8px;
+    padding: 4px;
+    transition: border-color 0.2s;
 }
 
 /* Style the search input field */
 .search-input {
     flex: 1;
-    border: none;
+    border: 1px solid #ccc;
     padding: 6px;
     font-size: 16px;
+    background-color: transparent;
+    outline: none;
+    margin-bottom: 10px;
+    margin-top: 10px;
 }
 
 /* Style the search button */
 .search-button {
-    background-color: #007bff;
-    color: #fff;
-    border: none;
+    background-color: transparent;
+    color: #007bff;
+    border: 1px solid #ccc;
     border-radius: 5px;
     padding: 6px 12px;
     margin-left: 5px;
     cursor: pointer;
+    transition: color 0.2s;
+    height: 100%; /* Set the height to match the search box */
 }
 
 /* Add hover effect to the search button */
 .search-button:hover {
-    background-color: #0056b3;
+    color: #0056b3;
+}
+
+/* Media Query for Responsiveness */
+@media (max-width: 768px) {
+    .search-input {
+        font-size: 14px; /* Adjust font size for smaller screens */
+    }
 }

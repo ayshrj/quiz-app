@@ -37,6 +37,12 @@
     color: #0056b3;
 }
 
+@media (min-width: 768px) {
+    .search-input {
+        width: 340px;
+    }
+}
+
 @media (max-width: 768px) {
     .search-input {
         font-size: 14px;

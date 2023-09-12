@@ -10,7 +10,7 @@ export const Quiz = (props) => {
   // const [result, setResult] = useState(null);
   const [correctCount, setCorrectCount] = useState(0);
   const [isLoadMoreDataClicked, setIsLoadMoreDataClicked] = useState(false)
-  const [answers, setAnswers] = useState(Array(totalQuestions).fill(null));
+  const [answers, setAnswers] = useState([]);
   const maxPage = 25;
 
   const handleCorrectAnswer = () => {
@@ -79,7 +79,7 @@ export const Quiz = (props) => {
         <button
           className={`upper-button page-change-button search-button upper-button-right`}
         >
-          Score: {correctCount}/{totalQuestions}
+          {answers.length === totalQuestions? "Final " : ""} Score: {correctCount}/{totalQuestions}
         </button>
       </div>
       {quizData.length > 0 && (
@@ -97,16 +97,17 @@ export const Quiz = (props) => {
       <div className="pagination">
         <button
           onClick={goToPrevPage}
-          disabled={currentPage === 0}
+          disabled={currentPage === 0 || isLoadMoreDataClicked}
           className={`page-change-button search-button ${
-            currentPage === 0 ? "disabled" : ""
+            currentPage === 0 || isLoadMoreDataClicked ? "disabled" : ""
           }`}
         >
           Prev
         </button>
+        {console.log(answers.length)}
         <button
           onClick={loadMoreData}
-          disabled={(currentPage === totalQuestions - 1 && currentPage === maxPage - 1)}
+          disabled={(currentPage === totalQuestions - 1 && currentPage >= maxPage) || isLoadMoreDataClicked}
           className={`page-change-button search-button ${
             ((currentPage === totalQuestions - 1 && currentPage >= maxPage) || isLoadMoreDataClicked) ? "disabled" : ""
           }`}

@@ -35,48 +35,91 @@ const DataSchema = new mongoose.Schema({
 const DataModel = mongoose.model("Data", DataSchema);
 
 app.post("/search", async (req, res) => {
+  // ... (existing code)
+});
+
+// Combine Data Function
+function combineData(data1, data2) {
+  // Parse the JSON strings into arrays
+  const array1 = JSON.parse(data1);
+  const array2 = JSON.parse(data2);
+
+  // Merge the two arrays
+  const combinedArray = [...array1, ...array2];
+
+  // Stringify the combined array back to JSON
+  const data3 = JSON.stringify(combinedArray, null, 4); // Use null and 4 for formatting
+
+  return data3;
+}
+
+// Get All Questions Function
+function getAllQuestions(jsonData) {
+  try {
+    const data = JSON.parse(jsonData);
+    let allQuestions = `{\n`;
+
+    for (const questionObj of data) {
+      const question = questionObj.question;
+      allQuestions += `${question},\n`;
+    }
+
+    allQuestions += "}";
+
+    return allQuestions;
+  } catch (error) {
+    console.error("Error parsing JSON data:", error);
+    return "";
+  }
+}
+
+app.post("/searchMore", async (req, res) => {
   const Topic = req.body.query;
+  const result = req.body.result;
 
   try {
     const existingData = await DataModel.findOne({ query: Topic });
 
-    if (existingData) {
-      res.json({ data: existingData.response });
-    } else {
-      const Basic = `Give a quiz with 5 questions on ${Topic} in the JSON format like
-        Eg:
-        [
-          {
-            "question": "Question Here",
-            "options": [
-              "Option A",
-              "Option B",
-              "Option C",
-              "Option D"
-            ],
-            "correct": "2"
-          }
-        ]
+    const existingQuestion = getAllQuestions(existingData.response);
 
-        Note: correct has 0-based indexing`;
+    const Basic = `Give a quiz with 5 questions on ${Topic} other than
+    ${existingQuestion}
+    in the JSON format like
+      Eg:
+      [
+        {
+          "question": "Question Here",
+          "options": [
+            "Option A",
+            "Option B",
+            "Option C",
+            "Option D"
+          ],
+          "correct": "2"
+        }
+      ]
 
-      let data = null;
+      Note: correct has 0-based indexing`;
 
-      const response = await openai.createChatCompletion({
-        model: "gpt-3.5-turbo",
-        messages: [{ role: "user", content: Basic }],
-      });
+    let data = null;
 
-      data = response.data.choices[0].message.content;
+    const response = await openai.createChatCompletion({
+      model: "gpt-3.5-turbo",
+      messages: [{ role: "user", content: Basic }],
+    });
 
-      const newData = new DataModel({
-        query: Topic,
-        response: data,
-      });
-      await newData.save();
+    data = combineData(
+      existingData.response,
+      response.data.choices[0].message.content.match(/\[.*\]/s)
+    );
 
-      res.json({ data });
-    }
+    const newData = new DataModel({
+      query: Topic,
+      response: data,
+    });
+    await newData.save();
+
+    res.json({ data });
   } catch (error) {
     console.error("Error:", error);
     res

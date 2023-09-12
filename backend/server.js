@@ -123,7 +123,7 @@ app.post("/searchMore", async (req, res) => {
   const Topic = req.body.query;
 
   try {
-    const existingData = await DataModel.findOne({ query: Topic });
+    let existingData = await DataModel.findOne({ query: Topic });
 
     const existingQuestion = getAllQuestions(existingData.response);
 
@@ -158,12 +158,16 @@ app.post("/searchMore", async (req, res) => {
       response.data.choices[0].message.content.match(/\[.*\]/s)
     );
 
-    const newData = new DataModel({
+    const newData = {
       query: Topic,
       response: data,
-    });
-    await newData.save();
+    };
 
+    await DataModel.updateMany({ query: Topic }, newData);
+
+    existingData = await DataModel.findOne({ query: Topic });
+
+    console.log(existingData);
     res.json({ data });
   } catch (error) {
     console.error("Error:", error);

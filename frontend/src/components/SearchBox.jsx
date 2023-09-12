@@ -8,6 +8,7 @@ export const SearchBox = () => {
     const [query, setQuery] = useState('');
     const [result, setResult] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [answers, setAnswers] = useState([]);
 
     const searchTopic = async () => {
         setIsLoading(true);
@@ -56,7 +57,7 @@ export const SearchBox = () => {
             {isLoading ? (
                 <Loader />
             ) : (
-                result && (result==="NaN" || ""? <div> No Quiz Can Be Generated </div> : <Quiz result={result} />)
+                result && (result==="NaN" || ""? <div> No Quiz Can Be Generated </div> : <Quiz result={result} query={query} answers={answers}/>)
             )}
         </div>
     );

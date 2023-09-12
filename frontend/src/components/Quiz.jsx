@@ -4,10 +4,11 @@ import "./Quiz.css";
 
 export const Quiz = (prop) => {
   const quizData = JSON.parse(prop.result);
-  const totalQuestions = quizData.length;
+  const [totalQuestions, setTotalQuestions] = useState(quizData.length);
   const [currentPage, setCurrentPage] = useState(0);
   const [correctCount, setCorrectCount] = useState(0);
   const [answers, setAnswers] = useState(Array(totalQuestions).fill(null));
+  const maxPage = 25;
 
   const handleCorrectAnswer = () => {
     setCorrectCount(correctCount + 1);
@@ -20,16 +21,28 @@ export const Quiz = (prop) => {
   };
 
   const goToNextPage = () => {
-    if (currentPage < totalQuestions - 1) {
+    console.log("Next Page")
+    if (currentPage < quizData.length - 1) {
       setCurrentPage(currentPage + 1);
     }
   };
 
   const goToPrevPage = () => {
+    console.log("Prev Page")
     if (currentPage > 0) {
       setCurrentPage(currentPage - 1);
     }
   };
+
+  const loadMoreData = (currentPage, totalQuestions) => {
+    if(currentPage !== totalQuestions - 1){
+      goToNextPage()
+    } else if (currentPage < maxPage) {
+      console.log("Load More") 
+    } else {
+      console.log("End") 
+    }
+  }
 
   return (
     <div className="quiz-container">
@@ -56,13 +69,13 @@ export const Quiz = (prop) => {
           Prev
         </button>
         <button
-          onClick={goToNextPage}
-          disabled={currentPage === totalQuestions - 1}
+          onClick={loadMoreData.bind(this, currentPage, totalQuestions)}
+          disabled={(currentPage === totalQuestions - 1 && currentPage === maxPage - 1)}
           className={`page-change-button search-button ${
-            currentPage === totalQuestions - 1 ? "disabled" : ""
+            (currentPage === totalQuestions - 1 && currentPage === maxPage - 1) ? "disabled" : ""
           }`}
         >
-          Next
+          { (currentPage === totalQuestions - 1 && currentPage === maxPage - 1) ? "End" : (currentPage === totalQuestions - 1) ? "Load" : "Next" }
         </button>
       </div>
     </div>

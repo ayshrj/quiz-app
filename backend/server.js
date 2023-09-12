@@ -34,6 +34,44 @@ const DataSchema = new mongoose.Schema({
 
 const DataModel = mongoose.model("Data", DataSchema);
 
+const filterUnwantedOption = (data) => {
+  const isGenericOption = (options) => {
+    const genericOptions = [
+      ["Option 1", "Option 2", "Option 3", "Option 4"],
+      ["Option A", "Option B", "Option C", "Option D"],
+      ["Option 1", "Option 2"],
+      ["Option A", "Option B"],
+      ["1", "2", "3", "4"],
+      ["A", "B", "C", "D"],
+      ["1", "2"],
+      ["A", "B"],
+    ];
+
+    return genericOptions.some(
+      (genericOption) =>
+        JSON.stringify(genericOption) === JSON.stringify(options)
+    );
+  };
+
+  const hasAnyDelimiter = (inputString) => /[:.)]/.test(inputString);
+
+  return data.filter((item) => {
+    if (isGenericOption(item.options)) {
+      return false;
+    }
+
+    if (item.options.some(hasAnyDelimiter)) {
+      item.options = item.options
+        .map((option) => option.split(/[:.)]/)[1].trim())
+        .filter(Boolean);
+
+      return item.options.length > 0;
+    }
+
+    return true;
+  });
+};
+
 app.post("/search", async (req, res) => {
   const Topic = req.body.query;
 
@@ -67,7 +105,11 @@ app.post("/search", async (req, res) => {
         messages: [{ role: "user", content: Basic }],
       });
 
-      data = response.data.choices[0].message.content;
+      data = JSON.stringify(
+        filterUnwantedOption(
+          JSON.parse(response.data.choices[0].message.content)
+        )
+      );
 
       const newData = new DataModel({
         query: Topic,
@@ -155,7 +197,11 @@ app.post("/searchMore", async (req, res) => {
 
     data = combineData(
       existingData.response,
-      response.data.choices[0].message.content.match(/\[.*\]/s)
+      JSON.stringify(
+        filterUnwantedOption(
+          JSON.parse(response.data.choices[0].message.content.match(/\[.*\]/s))
+        )
+      )
     );
 
     const newData = {
@@ -167,7 +213,7 @@ app.post("/searchMore", async (req, res) => {
 
     existingData = await DataModel.findOne({ query: Topic });
 
-    console.log(existingData);
+    // console.log(existingData);
     res.json({ data });
   } catch (error) {
     console.error("Error:", error);

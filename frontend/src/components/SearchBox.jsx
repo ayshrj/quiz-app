@@ -6,7 +6,7 @@ import { Quiz } from "./Quiz";
 
 export const SearchBox = () => {
     const [query, setQuery] = useState('');
-    const [result, setResult] = useState(null);
+    const [result, setResult] = useState(null); 
     const [isLoading, setIsLoading] = useState(false);
     const [answers, setAnswers] = useState([]);
 
@@ -39,28 +39,34 @@ export const SearchBox = () => {
 
     return (
         <div>
-            <form onSubmit={handleSubmit}>
-                <input
-                    type="text"
-                    value={query}
-                    onChange={inputChange}
-                    className="search-input"
-                    placeholder="Search Topic"
-                />
-                <button
-                    type="submit"
-                    className="search-button"
-                >
-                    Search
-                </button>
-            </form>
-            {isLoading ? (
-                <Loader />
-            ) : (
-                result && (result==="NaN" || ""? <div> No Quiz Can Be Generated </div> : <Quiz result={result} query={query} answers={answers}/>)
-            )}
+          <form onSubmit={handleSubmit}>
+            <input
+              type="text"
+              value={query}
+              onChange={inputChange}
+              className="search-input"
+              placeholder="Search Topic"
+            />
+            <button
+              type="submit"
+              className="search-button"
+            >
+              Search
+            </button>
+          </form>
+          {isLoading ? (
+            <Loader />
+          ) : (
+            result && (result==="NaN" || ""? <div> No Quiz Can Be Generated </div> : 
+            <Quiz 
+              result={result} 
+              query={query} 
+              answers={answers} 
+              setResult={setResult}  // Pass down setResult function
+            />)
+          )}
         </div>
-    );
+      );
 };
 
 export default SearchBox;

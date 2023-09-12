@@ -60,9 +60,7 @@ const filterUnwantedOption = (data) => {
     ];
 
     for (const genericOption of genericOptions) {
-      // Change 'genericOption' to 'genericOptions'
       if (JSON.stringify(genericOption) === JSON.stringify(options)) {
-        // Compare arrays
         return true;
       }
     }
@@ -194,54 +192,96 @@ app.post("/searchMore", async (req, res) => {
   try {
     let existingData = await DataModel.findOne({ query: Topic });
 
-    const existingQuestion = getAllQuestions(existingData.response);
+    if (existingData) {
+      const existingQuestion = getAllQuestions(existingData.response);
 
-    const Basic = `Give a quiz with 5 questions on ${Topic} other than
-    ${existingQuestion}
-    in the JSON format like
-      Eg:
-      [
-        {
-          "question": "Question Here",
-          "options": [
-            "Option A",
-            "Option B",
-            "Option C",
-            "Option D"
-          ],
-          "correct": "2"
-        }
-      ]
+      const Basic = `Give a quiz with 5 questions on ${Topic} other than
+        ${existingQuestion}
+        in the JSON format like
+          Eg:
+          [
+            {
+              "question": "Question Here",
+              "options": [
+                "Option A",
+                "Option B",
+                "Option C",
+                "Option D"
+              ],
+              "correct": "2"
+            }
+          ]
 
-      Note: correct has 0-based indexing`;
+          Note: correct has 0-based indexing`;
 
-    let data = null;
+      let data = null;
 
-    const response = await openai.createChatCompletion({
-      model: "gpt-3.5-turbo",
-      messages: [{ role: "user", content: Basic }],
-    });
+      const response = await openai.createChatCompletion({
+        model: "gpt-3.5-turbo",
+        messages: [{ role: "user", content: Basic }],
+      });
 
-    data = combineData(
-      existingData.response,
-      JSON.stringify(
-        filterUnwantedOption(
-          JSON.parse(response.data.choices[0].message.content.match(/\[.*\]/s))
+      data = combineData(
+        existingData.response,
+        JSON.stringify(
+          filterUnwantedOption(
+            JSON.parse(
+              response.data.choices[0].message.content.match(/\[.*\]/s)
+            )
+          )
         )
-      )
-    );
+      );
 
-    const newData = {
-      query: Topic,
-      response: data,
-    };
+      const newData = {
+        query: Topic,
+        response: data,
+      };
 
-    await DataModel.updateMany({ query: Topic }, newData);
+      await DataModel.updateMany({ query: Topic }, newData);
 
-    existingData = await DataModel.findOne({ query: Topic });
+      existingData = await DataModel.findOne({ query: Topic });
 
-    // console.log(existingData);
-    res.json({ data });
+      // console.log(existingData);
+      res.json({ data });
+    } else {
+      const Basic = `Give a quiz with 5 questions on ${Topic} in the JSON format like
+        Eg:
+        [
+          {
+            "question": "Question Here",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "correct": "2"
+          }
+        ]
+
+        Note: correct has 0-based indexing`;
+
+      let data = null;
+
+      const response = await openai.createChatCompletion({
+        model: "gpt-3.5-turbo",
+        messages: [{ role: "user", content: Basic }],
+      });
+
+      data = JSON.stringify(
+        filterUnwantedOption(
+          JSON.parse(response.data.choices[0].message.content)
+        )
+      );
+
+      const newData = new DataModel({
+        query: Topic,
+        response: data,
+      });
+      await newData.save();
+
+      res.json({ data });
+    }
   } catch (error) {
     console.error("Error:", error);
     res

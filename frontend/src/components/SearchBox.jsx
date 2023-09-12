@@ -12,7 +12,7 @@ export const SearchBox = () => {
     const searchTopic = async () => {
         setIsLoading(true);
         try {    
-            const res = await axios.post('http://192.168.1.9:5000/search', { query: query.trim().toLowerCase() });
+            const res = await axios.post('http://localhost:5000/search', { query: query.trim().toLowerCase() });
             setResult(res.data.data.match(/\[.*\]/s));
         } catch (error) {
             console.error('Error:', error); 

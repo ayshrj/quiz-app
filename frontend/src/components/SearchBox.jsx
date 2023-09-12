@@ -62,7 +62,7 @@ export const SearchBox = () => {
               result={result} 
               query={query} 
               answers={answers} 
-              setResult={setResult}  // Pass down setResult function
+              setResult={setResult}
             />)
           )}
         </div>

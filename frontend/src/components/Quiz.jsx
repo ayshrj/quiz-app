@@ -7,7 +7,7 @@ export const Quiz = (props) => {
   const quizData = JSON.parse(props.result);
   const [totalQuestions, setTotalQuestions] = useState(quizData.length);
   const [currentPage, setCurrentPage] = useState(0);
-  const [result, setResult] = useState(null);
+  // const [result, setResult] = useState(null);
   const [correctCount, setCorrectCount] = useState(0);
   const [isLoadMoreDataClicked, setIsLoadMoreDataClicked] = useState(false)
   const [answers, setAnswers] = useState(Array(totalQuestions).fill(null));
@@ -68,7 +68,20 @@ export const Quiz = (props) => {
   }, [currentPage, totalQuestions]);
 
   return (
+    
     <div className="quiz-container">
+      <div className="pagination">
+        <button
+          className={`upper-button page-change-button search-button upper-button-left`}
+        >
+          Question {currentPage + 1}
+        </button>
+        <button
+          className={`upper-button page-change-button search-button upper-button-right`}
+        >
+          Score: {correctCount}/{totalQuestions}
+        </button>
+      </div>
       {quizData.length > 0 && (
         <QuizBox
           key={currentPage}
@@ -78,9 +91,9 @@ export const Quiz = (props) => {
           selectedAnswer={answers[currentPage]}
         />
       )}
-      <div className="counter-block">
+      {/* <div className="counter-block">
         <span className="counter-number">{correctCount}/{totalQuestions}</span>
-      </div>
+      </div> */}
       <div className="pagination">
         <button
           onClick={goToPrevPage}
@@ -95,10 +108,10 @@ export const Quiz = (props) => {
           onClick={loadMoreData}
           disabled={(currentPage === totalQuestions - 1 && currentPage === maxPage - 1)}
           className={`page-change-button search-button ${
-            ((currentPage === totalQuestions - 1 && currentPage === maxPage - 1) || isLoadMoreDataClicked) ? "disabled" : ""
+            ((currentPage === totalQuestions - 1 && currentPage >= maxPage) || isLoadMoreDataClicked) ? "disabled" : ""
           }`}
         >
-          { (currentPage === totalQuestions - 1 && currentPage === maxPage - 1) ? "End" : (currentPage === totalQuestions - 1) ? "Load" : "Next" }
+          { (currentPage === totalQuestions - 1 && currentPage >= maxPage) ? "End" : (currentPage === totalQuestions - 1) ? "Load" : "Next" }
         </button>
       </div>
     </div>

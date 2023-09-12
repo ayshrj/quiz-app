@@ -29,6 +29,28 @@
   cursor: not-allowed;
 }
 
+.upper-button {
+  width: 215px;
+  margin: 0;
+  background-color: #ffffff;
+  /* background-color: transparent; */
+  color: #007bff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 6px 12px;
+  cursor: default;
+  transition: color 0.2s;
+  height: 100%;
+}
+
+.upper-button-left{
+  border-radius: 5px 0px 0px 5px;
+}
+
+.upper-button-right{
+  border-radius: 0px 5px 5px 0px;
+}
+
 @media (max-width: 768px) {
   .quiz {
     font-size: 16px;
@@ -45,6 +67,10 @@
 
   .page-change-button {
     width: 150px;
+  }
+
+  .upper-button {
+    width: 170px;    
   }
 }
 

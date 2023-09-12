@@ -35,6 +35,18 @@ const DataSchema = new mongoose.Schema({
 const DataModel = mongoose.model("Data", DataSchema);
 
 const filterUnwantedOption = (data) => {
+  const hasAnyDelimiter = (inputString) => {
+    const delimiters = [":", ".", ")"];
+
+    for (const delimiter of delimiters) {
+      if (inputString.includes(delimiter)) {
+        return true;
+      }
+    }
+
+    return false;
+  };
+
   const isGenericOption = (options) => {
     const genericOptions = [
       ["Option 1", "Option 2", "Option 3", "Option 4"],
@@ -47,29 +59,44 @@ const filterUnwantedOption = (data) => {
       ["A", "B"],
     ];
 
-    return genericOptions.some(
-      (genericOption) =>
-        JSON.stringify(genericOption) === JSON.stringify(options)
-    );
+    for (const genericOption of genericOptions) {
+      // Change 'genericOption' to 'genericOptions'
+      if (JSON.stringify(genericOption) === JSON.stringify(options)) {
+        // Compare arrays
+        return true;
+      }
+    }
+
+    return false;
   };
 
-  const hasAnyDelimiter = (inputString) => /[:.)]/.test(inputString);
+  for (let i = 0; i < data.length; i++) {
+    let options = data[i].options;
 
-  return data.filter((item) => {
-    if (isGenericOption(item.options)) {
-      return false;
+    if (isGenericOption(data[i].options)) {
+      data.splice(i, 1);
+      i--;
+    } else if (hasAnyDelimiter(data[i].options[0])) {
+      for (let j = 0; j < options.length; j++) {
+        let optionParts = options[j].split(/[:.)]/);
+
+        let newOption = optionParts[1] ? optionParts[1].trim() : "";
+        if (newOption !== "") {
+          options[j] = newOption;
+        } else {
+          options.splice(j, 1);
+          j--;
+        }
+      }
+
+      if (data[i].options.length === 0) {
+        data.splice(i, 1);
+        i--;
+      }
     }
+  }
 
-    if (item.options.some(hasAnyDelimiter)) {
-      item.options = item.options
-        .map((option) => option.split(/[:.)]/)[1].trim())
-        .filter(Boolean);
-
-      return item.options.length > 0;
-    }
-
-    return true;
-  });
+  return data;
 };
 
 app.post("/search", async (req, res) => {

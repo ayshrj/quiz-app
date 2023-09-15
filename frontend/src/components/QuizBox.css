@@ -34,7 +34,7 @@ body {
 
 .answer {
   margin: 5px;
-  height: 117px;
+  height: 50px;
   border: 2px solid #ccc;
   border-radius: 25px;
   cursor: pointer;
@@ -62,12 +62,6 @@ body {
 .answer-text {
   flex-grow: 1;
   padding: 10px;
-}
-
-.answer:hover {
-  border: dashed;
-  background-color: #f0f0f0;
-  border-color: #848484;
 }
 
 .correct {
@@ -102,6 +96,10 @@ body {
     height: 500px;
   }
 
+  .answer{
+    padding: 15px;
+  }
+
   .answer-circle {
     width: 30px;
     height: 30px;
@@ -110,12 +108,27 @@ body {
   .answer-text {
     padding: 15px;
   }
+
+  .answer:hover {
+    border: dashed;
+    background-color: #f0f0f0;
+    border-color: #848484;
+  }
 }
 
 @media screen and (max-width: 767px) {
   .quiz {
     width: 300px;
-    height: 500px;
+    height: 530px;
+  }
+
+  .question {
+    margin-bottom: 5px;
+  }
+  
+  .answer {
+    height: 70px;
+    padding: 14px;
   }
 
   .answer-circle {
@@ -126,5 +139,52 @@ body {
 
   .answer-text {
     padding: 5px;
+  }
+}
+
+/* @media screen and (min-width: 1200px) {
+  .quiz {
+    width: 600px;
+    height: 600px;
+  }
+
+  .answer {
+    padding: 20px;
+  }
+
+  .answer-circle {
+    width: 40px;
+    height: 40px;
+  }
+
+  .answer-text {
+    padding: 20px;
+  }
+} */
+
+/* Media query for screens with a maximum width of 320px */
+@media screen and (max-width: 320px) {
+  .quiz {
+    width: 250px;
+    height: 450px;
+  }
+
+  .question {
+    margin-bottom: 3px;
+  }
+  
+  .answer {
+    height: 700px;
+    padding: 10px;
+  }
+
+  .answer-circle {
+    width: 15px;
+    height: 15px;
+    margin: 0 3px;
+  }
+
+  .answer-text {
+    padding: 3px;
   }
 }

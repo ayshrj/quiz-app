@@ -9,7 +9,6 @@ import { Configuration, OpenAIApi } from "openai";
 import mongoose from "mongoose";
 
 const app = express();
-const port = 5000;
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -291,6 +290,8 @@ app.post("/searchMore", async (req, res) => {
       .json({ error: "An error occurred while processing your request" });
   }
 });
+
+const port = parseInt(process.env.PORT);
 
 app.listen(parseInt(process.env.PORT), () => {
   console.log(`Server is running on port ${process.env.PORT}`);

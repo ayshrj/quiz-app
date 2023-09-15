@@ -22,7 +22,9 @@ const openai = new OpenAIApi(
   })
 );
 
-mongoose.connect(process.env.mongoKey, {
+const mongoLink = `mongodb+srv://admin:${process.env.mongoKey}@openai-project.w5wxmvh.mongodb.net/?retryWrites=true&w=majority`;
+
+mongoose.connect(mongoLink, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
@@ -290,6 +292,6 @@ app.post("/searchMore", async (req, res) => {
   }
 });
 
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+app.listen(parseInt(process.env.PORT), () => {
+  console.log(`Server is running on port ${process.env.PORT}`);
 });

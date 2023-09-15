@@ -291,8 +291,8 @@ app.post("/searchMore", async (req, res) => {
   }
 });
 
-const port = parseInt(process.env.PORT);
+const port = process.env.PORT || 5001;
 
-app.listen(parseInt(process.env.PORT), () => {
-  console.log(`Server is running on port ${process.env.PORT}`);
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
 });
